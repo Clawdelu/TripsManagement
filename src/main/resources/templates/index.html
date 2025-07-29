@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dorel Generator - Modern Interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background-color: #f8f9fa; /* Light gray */
+      --card-background: #ffffff; /* White */
+      --text-color-primary: #343a40; /* Dark gray */
+      --text-color-secondary: #6c757d; /* Medium gray */
+      --border-color: #dee2e6; /* Light border */
+      --button-primary-bg: #1e3a8a; /* Darker blue, inspired by shadcn's primary button */
+      --button-primary-hover-bg: #1c337a; /* Slightly darker */
+      --focus-ring-color: rgba(30, 58, 138, 0.4); /* Focus ring */
+      --success-color: #28a745;
+      --error-color: #dc3545;
+      --toast-background: #343a40;
+      --toast-text: #ffffff;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--background-color);
+      color: var(--text-color-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--text-color-primary);
+    }
+
+    /* Card Styling */
+    .card {
+      background-color: var(--card-background);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border-color);
+    }
+
+    .card-header {
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-color-primary);
+    }
+
+    .card-description {
+      font-size: 0.9em;
+      color: var(--text-color-secondary);
+    }
+
+    .card-content {
+      display: grid;
+      gap: 16px; /* Spacing between form elements */
+    }
+
+    /* Form Elements */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.9em;
+      font-weight: 500;
+      color: var(--text-color-primary);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1em;
+      color: var(--text-color-primary);
+      background-color: var(--card-background);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="file"]:focus {
+      outline: none;
+      border-color: var(--button-primary-bg);
+      box-shadow: 0 0 0 3px var(--focus-ring-color);
+    }
+
+    /* File input specific styles for better appearance */
+    input[type="file"]::file-selector-button {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: #e9ecef;
+      cursor: pointer;
+      font-size: 0.9em;
+      color: var(--text-color-primary);
+      transition: background-color 0.2s ease;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background-color: #dee2e6;
+    }
+
+    /* Button Styling */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      font-size: 1em;
+      font-weight: 500;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+      border: 1px solid transparent;
+      background-color: var(--button-primary-bg);
+      color: var(--card-background); /* White text on primary button */
+    }
+
+    .button:hover {
+      background-color: var(--button-primary-hover-bg);
+    }
+
+    .button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--focus-ring-color);
+    }
+
+    /* Separator */
+    .separator {
+      height: 1px;
+      background-color: var(--border-color);
+      margin: 48px auto; /* Increased margin for more separation */
+      max-width: 400px;
+    }
+
+    /* Loader */
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .loader-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 6px solid #e0e0e0;
+      border-top: 6px solid var(--button-primary-bg);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Toast Notifications */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1001;
+    }
+
+    .toast {
+      background-color: var(--toast-background);
+      color: var(--toast-text);
+      padding: 12px 20px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 250px;
+      max-width: 350px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideIn 0.3s forwards ease-out;
+    }
+
+    .toast.error {
+        background-color: var(--error-color);
+    }
+
+    .toast.success {
+        background-color: var(--success-color);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .toast-message {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    .toast-close-button {
+      background: none;
+      border: none;
+      color: var(--toast-text);
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 0 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Dorel Generator</h1>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">EXCEL Trip Generator</h2>
+      <p class="card-description">Generate an Excel file from CSV and another Excel file.</p>
+    </div>
+    <div class="card-content">
+      <form id="excelForm">
+        <div class="form-group">
+          <label for="csvFileExcel">CSV File</label>
+          <input type="file" id="csvFileExcel" name="csvFile" accept=".csv" required>
+        </div>
+        <div class="form-group">
+          <label for="excelFileExcel">Excel File</label>
+          <input type="file" id="excelFileExcel" name="excelFile" accept=".xlsx" required>
+        </div>
+        <button type="button" class="button" onclick="uploadAndDownloadExcel()">Generate EXCEL</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">ANEXA Generator</h2>
+      <p class="card-description">Generate ANEXA documents from multiple Excel files and details.</p>
+    </div>
+    <div class="card-content">
+      <form id="anexaForm">
+        <div class="form-group">
+          <label for="paymentExcel">Payment Excel File(s)</label>
+          <input type="file" id="paymentExcel" name="paymentExcel" accept=".xlsx" multiple required>
+        </div>
+        <div class="form-group">
+          <label for="loadsExcel">Loads Excel File</label>
+          <input type="file" id="loadsExcel" name="loadsExcel" accept=".xlsx" required>
+        </div>
+        <div class="form-group">
+          <label for="invoice">Invoice</label>
+          <input type="text" id="invoice" name="invoice" required>
+        </div>
+        <div class="form-group">
+          <label for="payment">Payment</label>
+          <input type="text" id="payment" name="payment" required>
+        </div>
+        <div class="form-group">
+          <label for="noAnexa">No. Anexa</label>
+          <input type="number" id="noAnexa" name="noAnexa" required>
+        </div>
+        <div class="form-group">
+          <label for="SCAC">SCAC</label>
+          <input type="text" id="SCAC" name="SCAC" required>
+        </div>
+        <button type="button" class="button" onclick="uploadAndDownloadZip()">Generate ANEXA</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">DKV Reporting</h2>
+      <p class="card-description">Generate a DKV report from an Excel file.</p>
+    </div>
+    <div class="card-content">
+      <form id="dkvForm">
+        <div class="form-group">
+          <label for="excelDKVFile">DKV Excel File</label>
+          <input type="file" id="excelDKVFile" name="excelDKVFile" accept=".xlsx" required>
+        </div>
+        <button type="button" class="button" onclick="uploadDkvFile()">Generate DKV</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="loader-overlay" class="loader-overlay">
+  <div class="spinner"></div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+  // --- Utility Functions ---
+  function showLoader() {
+    document.getElementById('loader-overlay').classList.add('show');
+  }
+
+  function hideLoader() {
+    document.getElementById('loader-overlay').classList.remove('show');
+  }
+
+  function showToast(message, type = 'info', duration = 3000) {
+    const toastContainer = document.getElementById('toast-container');
+    const toastElement = document.createElement('div');
+    toastElement.classList.add('toast', type);
+    toastElement.innerHTML = `
+      <span class="toast-message">${message}</span>
+      <button class="toast-close-button" onclick="this.parentNode.remove()">×</button>
+    `;
+    toastContainer.appendChild(toastElement);
+
+    setTimeout(() => {
+      toastElement.remove();
+    }, duration);
+  }
+
+  // --- Form Submission Functions ---
+  async function uploadAndDownloadExcel() {
+    const form = document.getElementById('excelForm');
+    const formData = new FormData();
+
+    const csvFile = form.querySelector('input[name="csvFile"]').files[0];
+    const excelFile = form.querySelector('input[name="excelFile"]').files[0];
+
+    if (!csvFile || !excelFile) {
+      showToast("Please select both CSV and Excel files for Excel generation.", 'error');
+      return;
+    }
+
+    formData.append("csvFile", csvFile);
+    formData.append("excelFile", excelFile);
+
+    showLoader();
+    try {
+      const response = await fetch('/api/csv/upload-h-csv-xlsx', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error generating Excel: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "processed Trips.xlsx";
+      link.click();
+      showToast("Excel file generated successfully!", 'success');
+    } catch (error) {
+      console.error("Excel generation error:", error);
+      showToast(error.message, 'error');
+    } finally {
+      hideLoader();
+    }
+  }
+
+  async function uploadAndDownloadZip() {
+    const form = document.getElementById('anexaForm');
+    const formData = new FormData();
+
+    const paymentFiles = form.querySelector('input[name="paymentExcel"]').files;
+    const loadsExcel = form.querySelector('input[name="loadsExcel"]').files[0];
+    const invoice = form.querySelector('input[name="invoice"]').value;
+    const payment = form.querySelector('input[name="payment"]').value;
+    const noAnexa = form.querySelector('input[name="noAnexa"]').value;
+    const scacValue = form.querySelector('input[name="SCAC"]').value;
+
+    if (paymentFiles.length === 0 || !loadsExcel || !invoice || !payment || !noAnexa) {
+      showToast("Please fill all required fields for ANEXA generation.", 'error');
+      return;
+    }
+
+    for (let i = 0; i < paymentFiles.length; i++) {
+        formData.append("paymentExcel", paymentFiles[i]);
+    }
+    formData.append("loadsExcel", loadsExcel);
+    formData.append("invoice", invoice);
+    formData.append("payment", payment);
+    formData.append("noAnexa", noAnexa);
+    if (scacValue) {
+        formData.append("SCAC", scacValue);
+    }
+
+    showLoader();
+    try {
+      const response = await fetch('/api/excel/get-payment-excel', {
+          method: 'POST',
+          body: formData
+      });
+
+      if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error generating ANEXA: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "anexa.zip";
+      link.click();
+      showToast("ANEXA generated successfully!", 'success');
+    } catch (error) {
+      console.error("ANEXA generation error:", error);
+      showToast(error.message, 'error');
+    } finally {
+      hideLoader();
+    }
+  }
+
+  async function uploadDkvFile() {
+    const form = document.getElementById('dkvForm');
+    const formData = new FormData();
+    const file = form.querySelector('input[name="excelDKVFile"]').files[0];
+
+    if (!file) {
+      showToast("Please select a DKV Excel file.", 'error');
+      return;
+    }
+
+    formData.append("excelDKVFile", file);
+
+    showLoader();
+    try {
+      const response = await fetch('/api/csv/dkv-reporting', {
+          method: 'POST',
+          body: formData
+      });
+
+      if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error generating DKV report: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "result-DKV.txt";
+      link.click();
+      showToast("DKV report generated successfully!", 'success');
+    } catch (error) {
+      console.error("DKV generation error:", error);
+      showToast(error.message, 'error');
+    } finally {
+      hideLoader();
+    }
+  }
+</script>
+</body>
+</html>

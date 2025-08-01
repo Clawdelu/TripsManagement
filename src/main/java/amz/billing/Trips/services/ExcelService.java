@@ -819,11 +819,25 @@ public class ExcelService implements IExcelService {
         if (row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim().equals("T-116W2TN1K"))
             parts = new String[]{"Stop1", "Stop2"};
 
+
+        String statusStr = row.getCell(13, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        Status status;
+        try {
+            String[] statusParts = statusStr.split(" - ");
+            if (statusParts.length > 1 && !statusParts[1].isBlank()) {
+                status = Status.valueOf(statusParts[1].trim().toUpperCase());
+            } else {
+                status = Status.COMPLETED;
+            }
+        } catch (Exception e) {
+            status = Status.COMPLETED;
+        }
         return Trip.builder()
                 .vrid(row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim())
                 .price(row.getCell(35, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue())
                 .totalDistance(Double.valueOf(row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().split(" ")[0]))
-                .status(Status.valueOf(row.getCell(13, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().split(" - ")[1].toUpperCase()))
+                //.status(Status.valueOf(row.getCell(13, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().split(" - ")[1].toUpperCase()))
+                .status(status)
                 .stopList(List.of(new Stop(parts[0],
                                 LocalDateTime.parse(row.getCell(7).getStringCellValue().replace(" UTC", ""), formatter),
                                 LocalDateTime.now()),

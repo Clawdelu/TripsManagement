@@ -47,11 +47,11 @@ public class ExcelService implements IExcelService {
             new Company(UUID.randomUUID().toString(), "Sabdary", List.of("SV10SDT", "SV26SDT", "SV76SDT", "SV31AMT"), "Sabdary", 10, 10),
             new Company(UUID.randomUUID().toString(), "Johandav", List.of("SV01JHH", "SV02JHH", "SV04JHH", "SV05JHH", "SV06JHH", "SV08JHH", "SV09JHH", "SV10JHH", "SV18JHH",
                     "SV19JHH", "SV20JHH", "SV22JHH", "SV24JHH", "SV26JHH", "SV28JHH", "SV30JHH", "SV31JHH", "SV32JHH", "SV33JHH", "SV34JHH", "SV35JHH", "SV36JHH", "SV37JHH", "SV38JHH","SV41JHH","SV43JHH"
-                    ,"SV45JHH","SV46JHH","SV47JHH","SV52JHH","SV55JHH","SV68JHH","SV89DMB","SV95NMD"), "JOHANDAV", 5, 4.25),
+                    ,"SV45JHH","SV46JHH","SV47JHH","SV49JHH","SV52JHH","SV55JHH","SV60JHH","SV68JHH","SV89DMB","SV95NMD"), "JOHANDAV", 5, 4.25),
             new Company(UUID.randomUUID().toString(), "LLS", List.of("SV96LLS"), "LLT", 4, 5),
             new Company(UUID.randomUUID().toString(), "Farlan", List.of("SV39FAR","SV57FAR","SV78FAR","SV29VNC","SV74FRL","SV47FRL"), "FARLAN", 10, 3.5),
             new Company(UUID.randomUUID().toString(), "HIGHWAY", List.of("NT77LKW"), "HIGHWAY TRUCKS SRL", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Fabian Truck", List.of("B250MMX", "B251MMX", "B252MMX", "B253MMX", "B254MMX", "B255MMX", "B256MMX", "SV50MMX", "SV18MMX", "SV89MMX"), "FABIAN TRUCK SRL", 5, 4.25),
+            new Company(UUID.randomUUID().toString(), "Fabian Truck", List.of("B250MMX", "B251MMX", "B252MMX", "B253MMX", "B254MMX", "B255MMX", "B256MMX","B257MMX","SV48MMX", "SV50MMX", "SV18MMX", "SV89MMX"), "FABIAN TRUCK SRL", 5, 4.25),
             new Company(UUID.randomUUID().toString(), "Eurofratello", List.of("SV18MZN"), "EURO FRATELLO SRL", 9, 9),
             new Company(UUID.randomUUID().toString(), "Spark Avu", List.of("SV25AVU"), "SPARK AVU SRL", 10, 10),
             new Company(UUID.randomUUID().toString(), "Transroyal", List.of("SV15PVG"), "TRANSROYAL SRL", 10, 10),
@@ -167,13 +167,14 @@ public class ExcelService implements IExcelService {
                     rowIterator.next();
                 }
 
+                System.out.println("Am intrat in mapare obiecte din factura");
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
                     Trip trip = mapRowToTripObject(row);
                     if (trip != null)
                         trips.add(trip);
                 }
-
+                System.out.println("Am iesit cu Success");
 //            Map<String, Trip> companyTrucksMapped = new HashMap<>();
 //            boolean founded = false;
 //            for (var trip : trips) {
@@ -797,13 +798,18 @@ public class ExcelService implements IExcelService {
 //            parts[1] = parts[1] + " " + parts[2];
 //            parts = Arrays.copyOf(parts, parts.length - 1);
 //        }
+
+        if (!row.getCell(5).getStringCellValue().isEmpty() && !row.getCell(0).getStringCellValue().isEmpty())
+            return null;
+
+        if (!row.getCell(4).getStringCellValue().isEmpty() && row.getCell(5).getStringCellValue().isEmpty()
+        && row.getCell(6).getStringCellValue().isEmpty())
+            return null;
+
         if (parts.length > 2) {
             parts[1] = parts[2];
             parts = Arrays.copyOf(parts, parts.length - 1);
         }
-
-        if (!row.getCell(5).getStringCellValue().isEmpty() && !row.getCell(0).getStringCellValue().isEmpty())
-            return null;
 
         if (!row.getCell(5).getStringCellValue().isEmpty() && row.getCell(0).getStringCellValue().isEmpty()) {
             row.createCell(6).setCellValue(row.getCell(5).getStringCellValue());
@@ -838,6 +844,8 @@ public class ExcelService implements IExcelService {
         } catch (Exception e) {
             status = Status.COMPLETED;
         }
+        System.out.println(row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim());
+
         return Trip.builder()
                 .vrid(row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim())
                 .price(row.getCell(35, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue())

@@ -32,26 +32,26 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class ExcelService implements IExcelService {
     public static final List<Company> companyList = List.of(
-            new Company(UUID.randomUUID().toString(), "PITAR", List.of("SV01PIT","SV03PIT","SV04PTI","SV08PTI","SV18PIT","SV20PTI","SV23PTI","SV28PIT","SV31PIT","SV32PIT","SV37PIT","SV41PIT",
-                    "SV62PYT","SV64PIT","SV71PIT","SV83PIT","SV86PIT"), "PITAR", 3, 4.5),
-            new Company(UUID.randomUUID().toString(), "PHT", List.of("SV19PHT", "SV23SPD", "SV24SPD","SV33PHT", "SV44PHT","SV46PHT","SV48PHT","SV52PHT", "SV55PHT", "SV77PHT","SV88PHT", "SV93PHT"), "PHT", 2, 3.5),
-            new Company(UUID.randomUUID().toString(), "Prime", List.of("2GFP388", "2GXY352"), "PRIME NOVA TRANS", 0, 6),
+            new Company(UUID.randomUUID().toString(), "PITAR", List.of("SV01PIT", "SV03PIT", "SV04PTI", "SV08PTI", "SV18PIT", "SV20PTI", "SV23PTI", "SV28PIT", "SV31PIT", "SV32PIT", "SV37PIT", "SV41PIT",
+                    "SV62PYT", "SV64PIT", "SV71PIT", "SV83PIT", "SV86PIT"), "PITAR", 3, 4.5),
+            new Company(UUID.randomUUID().toString(), "PHT", List.of("SV19PHT", "SV23SPD", "SV24SPD", "SV33PHT", "SV44PHT", "SV46PHT", "SV48PHT", "SV52PHT", "SV55PHT", "SV77PHT", "SV88PHT", "SV93PHT"), "PHT", 2, 3.5),
+            new Company(UUID.randomUUID().toString(), "Prime", List.of("2GFP388", "2GXY352","2FLR684","2HQW851"), "PRIME NOVA TRANS", 0, 6),
             new Company(UUID.randomUUID().toString(), "Royal", List.of("SV16FHK", "SV40RMT"), "Royal", 6, 6),
-            new Company(UUID.randomUUID().toString(), "AutoLuk", List.of("B28SPD","B52SPD"), "AUTOLUK", 10, 10),
+            new Company(UUID.randomUUID().toString(), "AutoLuk", List.of("B28SPD", "B52SPD"), "AUTOLUK", 10, 10),
             new Company(UUID.randomUUID().toString(), "Nilo", List.of("SV38DUC"), "NILO", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Eurot", List.of("SV39EUR","SV24EWR", "SV50EUR", "SV62EUR"), "EUROTRANSFLOR", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Miniflor", List.of("SV05MNY","SV24MNY", "SV48MYM", "SV65MYN", "SV11MNI", "SV48MYM"), "Miniflor", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Cupola", List.of("SV26CUP"), "CUP", 10, 10),
+            new Company(UUID.randomUUID().toString(), "Eurot", List.of("SV39EUR", "SV24EWR", "SV50EUR", "SV62EUR","SV29EWR"), "EUROTRANSFLOR", 10, 10),
+            new Company(UUID.randomUUID().toString(), "Miniflor", List.of("SV05MNY", "SV24MNY", "SV48MYM", "SV65MYN", "SV11MNI", "SV48MYM","SV96EWR"), "Miniflor", 10, 10),
+            new Company(UUID.randomUUID().toString(), "Cupola", List.of("SV26CUP","SV42CCS"), "CUP", 10, 10),
             new Company(UUID.randomUUID().toString(), "DUO", List.of("B999DKL"), "DUO Kanlogistik", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Brumar", List.of("BC34BRU", "BC95BRU","BC99BRU"), "BRUMAR CARM SRL", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Sabdary", List.of("SV10SDT", "SV26SDT", "SV76SDT", "SV31AMT"), "Sabdary", 10, 10),
+            new Company(UUID.randomUUID().toString(), "Brumar", List.of("BC34BRU", "BC95BRU", "BC99BRU"), "BRUMAR CARM SRL", 10, 10),
+            new Company(UUID.randomUUID().toString(), "Sabdary", List.of("SV10SDT", "SV26SDT", "SV76SDT","SV98SDT", "SV31AMT"), "Sabdary", 10, 10),
             new Company(UUID.randomUUID().toString(), "Johandav", List.of("SV01JHH", "SV02JHH", "SV04JHH", "SV05JHH", "SV06JHH", "SV08JHH", "SV09JHH", "SV10JHH", "SV18JHH",
-                    "SV19JHH", "SV20JHH", "SV22JHH", "SV24JHH", "SV26JHH", "SV28JHH", "SV30JHH", "SV31JHH", "SV32JHH", "SV33JHH", "SV34JHH", "SV35JHH", "SV36JHH", "SV37JHH", "SV38JHH","SV41JHH","SV43JHH"
-                    ,"SV45JHH","SV46JHH","SV47JHH","SV49JHH","SV52JHH","SV55JHH","SV60JHH","SV68JHH","SV89DMB","SV95NMD"), "JOHANDAV", 5, 4.25),
+                    "SV19JHH", "SV20JHH", "SV22JHH", "SV24JHH", "SV26JHH", "SV28JHH", "SV30JHH", "SV31JHH", "SV32JHH", "SV33JHH", "SV34JHH", "SV35JHH", "SV36JHH", "SV37JHH", "SV38JHH", "SV41JHH", "SV43JHH"
+                    , "SV45JHH", "SV46JHH", "SV47JHH", "SV49JHH", "SV52JHH", "SV55JHH", "SV60JHH", "SV68JHH", "SV89DMB", "SV95NMD"), "JOHANDAV", 5, 4.25),
             new Company(UUID.randomUUID().toString(), "LLS", List.of("SV96LLS"), "LLT", 4, 5),
-            new Company(UUID.randomUUID().toString(), "Farlan", List.of("SV39FAR","SV57FAR","SV78FAR","SV29VNC","SV74FRL","SV47FRL"), "FARLAN", 10, 3.5),
+            new Company(UUID.randomUUID().toString(), "Farlan", List.of("SV39FAR", "SV57FAR", "SV78FAR", "SV29VNC", "SV74FRL", "SV47FRL"), "FARLAN", 10, 3.5),
             new Company(UUID.randomUUID().toString(), "HIGHWAY", List.of("NT77LKW"), "HIGHWAY TRUCKS SRL", 10, 10),
-            new Company(UUID.randomUUID().toString(), "Fabian Truck", List.of("B250MMX", "B251MMX", "B252MMX", "B253MMX", "B254MMX", "B255MMX", "B256MMX","B257MMX","SV48MMX", "SV50MMX", "SV18MMX", "SV89MMX"), "FABIAN TRUCK SRL", 5, 4.25),
+            new Company(UUID.randomUUID().toString(), "Fabian Truck", List.of("B250MMX", "B251MMX", "B252MMX", "B253MMX", "B254MMX", "B255MMX", "B256MMX", "B257MMX", "SV48MMX", "SV50MMX", "SV18MMX", "SV89MMX"), "FABIAN TRUCK SRL", 5, 4.25),
             new Company(UUID.randomUUID().toString(), "Eurofratello", List.of("SV18MZN"), "EURO FRATELLO SRL", 9, 9),
             new Company(UUID.randomUUID().toString(), "Spark Avu", List.of("SV25AVU"), "SPARK AVU SRL", 10, 10),
             new Company(UUID.randomUUID().toString(), "Transroyal", List.of("SV15PVG"), "TRANSROYAL SRL", 10, 10),
@@ -203,10 +203,13 @@ public class ExcelService implements IExcelService {
             if (trip.getStatus().equals(Status.DETENTION) && trip.getVehicleID() == null) {
                 trip.setVehicleID("PHT");
             }
-            if(trip.getVehicleID()==null){
+            if (trip.getVehicleID() == null) {
 
-                System.out.println("BULITO, nu are vehicleid" + trip.getVrid());}
+                System.out.println("BULITO, nu are vehicleid" + trip.getVrid());
+                trip.setVehicleID("PHT1");
+            }
         }
+
 
         Map<String, List<Trip>> companyTrucksMapped = trips.stream()
                 .collect(Collectors.groupingBy(
@@ -220,8 +223,8 @@ public class ExcelService implements IExcelService {
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 list -> list.stream()
-                                        .sorted(Comparator.comparing(Trip::getVehicleID) // Prima sortare după VehicleID
-                                                .thenComparing(trip -> trip.getStopList().getFirst().getStopYardArrival())) // A doua sortare după data
+                                        .sorted(Comparator.comparing(Trip::getVehicleID) // Prima sortare dupa VehicleID
+                                                .thenComparing(trip -> trip.getStopList().getFirst().getStopYardArrival())) // A doua sortare dupa data
                                         .collect(Collectors.toList())
                         )
                 ));
@@ -245,11 +248,10 @@ public class ExcelService implements IExcelService {
 //                zipOutputStream.closeEntry();
 //            }
 
-                ZipEntry entry1 = new ZipEntry("Anexa fct - "+gutschrift+" wk.xlsx");
-                zipOutputStream.putNextEntry(entry1);
-                zipOutputStream.write(paymentExportExcel);
-                zipOutputStream.closeEntry();
-
+            ZipEntry entry1 = new ZipEntry("Anexa fct - " + gutschrift + " wk.xlsx");
+            zipOutputStream.putNextEntry(entry1);
+            zipOutputStream.write(paymentExportExcel);
+            zipOutputStream.closeEntry();
 
 
             ZipEntry entry2 = new ZipEntry("AMZ.25 loads - TEST.xlsx");
@@ -277,46 +279,46 @@ public class ExcelService implements IExcelService {
                     Cell vridCell = row.getCell(7);
 
                     //if (vridCell == null) System.out.println("Celula pentru VRID lipsește pe rândul");
-                   // else /
-                        //System.out.println("nr: "+vridCell.getRowIndex());
-                        for (Trip t : tripList) {
-                            if (t.getVrid().equals(vridCell.getStringCellValue())) {
-                                t.setVehicleID(row.getCell(1).getStringCellValue());
+                    // else /
+                    //System.out.println("nr: "+vridCell.getRowIndex());
+                    for (Trip t : tripList) {
+                        if (t.getVrid().equals(vridCell.getStringCellValue())) {
+                            t.setVehicleID(row.getCell(1).getStringCellValue());
 
-                                Cell gutschriftCell = row.getCell(9);
-                                if (gutschriftCell == null) gutschriftCell = row.createCell(9);
-                                if (row.getCell(9).getStringCellValue().isEmpty()) {
-                                    gutschriftCell.setCellValue(gutschrift);
-                                }
-
-                                if (t.getPrice().equals(row.getCell(6).getNumericCellValue())) {
-                                    row.getCell(12).setCellValue("=");
-                                } else if (!t.getStatus().equals(Status.DETENTION)) {
-                                    row.getCell(12).setCellValue(t.getPrice());
-                                }
-
-                                if (t.getStatus().equals(Status.DETENTION) && row.getCell(3).getStringCellValue().toLowerCase().equals("caz")) {
-                                    row.getCell(12).setCellValue("D - " + t.getPrice());
-                                } else if (t.getStatus().equals(Status.COMPLETED)) {
-                                    row.getCell(4).setCellValue(t.getPrice() / t.getTotalDistance());
-                                    if (t.getTotalDistance() == null) t.setTotalDistance(0.0);
-                                    row.getCell(5).setCellValue(t.getTotalDistance());
-                                }
-
-                                Cell invoiceCell = row.getCell(10);
-                                if (invoiceCell == null) invoiceCell = row.createCell(10);
-                                invoiceCell.setCellValue(invoice);
-
-                                Cell paymentCell = row.getCell(11);
-                                if (paymentCell == null) paymentCell = row.createCell(11);
-                                paymentCell.setCellValue(payment);
-
-                                Cell nrFctCell = row.getCell(16);
-                                if (nrFctCell == null) nrFctCell = row.createCell(16);
-                                nrFctCell.setCellValue(noAnexa);
+                            Cell gutschriftCell = row.getCell(9);
+                            if (gutschriftCell == null) gutschriftCell = row.createCell(9);
+                            if (row.getCell(9).getStringCellValue().isEmpty()) {
+                                gutschriftCell.setCellValue(gutschrift);
                             }
+
+                            if (t.getPrice().equals(row.getCell(6).getNumericCellValue())) {
+                                row.getCell(12).setCellValue("=");
+                            } else if (!t.getStatus().equals(Status.DETENTION)) {
+                                row.getCell(12).setCellValue(t.getPrice());
+                            }
+
+                            if (t.getStatus().equals(Status.DETENTION) && row.getCell(3).getStringCellValue().toLowerCase().equals("caz")) {
+                                row.getCell(12).setCellValue("D - " + t.getPrice());
+                            } else if (t.getStatus().equals(Status.COMPLETED)) {
+                                row.getCell(4).setCellValue(t.getPrice() / t.getTotalDistance());
+                                if (t.getTotalDistance() == null) t.setTotalDistance(0.0);
+                                row.getCell(5).setCellValue(t.getTotalDistance());
+                            }
+
+                            Cell invoiceCell = row.getCell(10);
+                            if (invoiceCell == null) invoiceCell = row.createCell(10);
+                            invoiceCell.setCellValue(invoice);
+
+                            Cell paymentCell = row.getCell(11);
+                            if (paymentCell == null) paymentCell = row.createCell(11);
+                            paymentCell.setCellValue(payment);
+
+                            Cell nrFctCell = row.getCell(16);
+                            if (nrFctCell == null) nrFctCell = row.createCell(16);
+                            nrFctCell.setCellValue(noAnexa);
                         }
                     }
+                }
 
             }
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -437,7 +439,7 @@ public class ExcelService implements IExcelService {
 
             double lastDiscount = 10.0;
             boolean AVEKA = false;
-             //List<byte[]> exportExcels = new ArrayList<>();
+            //List<byte[]> exportExcels = new ArrayList<>();
 
             if (SCAC.equals("AVEKA")) {
 
@@ -524,86 +526,86 @@ public class ExcelService implements IExcelService {
                     }
 
 
-                   // if (companyTrucksMapped.containsKey(company.getKey())) {
-                        List<Trip> tripsToAdd = new ArrayList<>();
-                        if (company.getKey().equals("Farlan")) {
-                            tripsToAdd = companyTrucksMapped.get(company.getKey());
-                        } else {
-                            tripsToAdd = companyTrucksMapped.entrySet().stream()
-                                    .filter(e -> !e.getKey().equals("Farlan"))
-                                    .flatMap(e -> e.getValue().stream())
-                                    .toList();
-                        }
+                    // if (companyTrucksMapped.containsKey(company.getKey())) {
+                    List<Trip> tripsToAdd = new ArrayList<>();
+                    if (company.getKey().equals("Farlan")) {
+                        tripsToAdd = companyTrucksMapped.get(company.getKey());
+                    } else {
+                        tripsToAdd = companyTrucksMapped.entrySet().stream()
+                                .filter(e -> !e.getKey().equals("Farlan"))
+                                .flatMap(e -> e.getValue().stream())
+                                .toList();
+                    }
 
 
-                        int noOfTrip = 1;
-                        for (var trip : tripsToAdd) {
-                            Row newTripRow = sheet.createRow(rowIndex++);
-                            Cell nrCell = newTripRow.createCell(0);
-                            nrCell.setCellValue(noOfTrip++);
-                            nrCell.setCellStyle(centerSimple11FontStyle);
+                    int noOfTrip = 1;
+                    for (var trip : tripsToAdd) {
+                        Row newTripRow = sheet.createRow(rowIndex++);
+                        Cell nrCell = newTripRow.createCell(0);
+                        nrCell.setCellValue(noOfTrip++);
+                        nrCell.setCellStyle(centerSimple11FontStyle);
 
-                            Cell dataCell = newTripRow.createCell(1);
-                            dataCell.setCellValue(trip.getStopList().getFirst().getStopYardArrival());
-                            dataCell.setCellStyle(dataCellStyle);
+                        Cell dataCell = newTripRow.createCell(1);
+                        dataCell.setCellValue(trip.getStopList().getFirst().getStopYardArrival());
+                        dataCell.setCellStyle(dataCellStyle);
 
-                            Cell camionCell = newTripRow.createCell(2);
-                            camionCell.setCellValue(trip.getVehicleID());
-                            camionCell.setCellStyle(centerSimple11FontStyle);
+                        Cell camionCell = newTripRow.createCell(2);
+                        camionCell.setCellValue(trip.getVehicleID());
+                        camionCell.setCellStyle(centerSimple11FontStyle);
 
-                            Cell incarcareCell = newTripRow.createCell(3);
-                            incarcareCell.setCellValue(trip.getStopList().getFirst().getStopName());
-                            incarcareCell.setCellStyle(incDescContentStyle);
+                        Cell incarcareCell = newTripRow.createCell(3);
+                        incarcareCell.setCellValue(trip.getStopList().getFirst().getStopName());
+                        incarcareCell.setCellStyle(incDescContentStyle);
 
-                            Cell descarcareCell = newTripRow.createCell(4);
-                            descarcareCell.setCellValue(trip.getStopList().getLast().getStopName());
-                            descarcareCell.setCellStyle(incDescContentStyle);
+                        Cell descarcareCell = newTripRow.createCell(4);
+                        descarcareCell.setCellValue(trip.getStopList().getLast().getStopName());
+                        descarcareCell.setCellStyle(incDescContentStyle);
 
-                            Cell vridCell = newTripRow.createCell(5);
-                            vridCell.setCellValue(trip.getVrid());
-                            vridCell.setCellStyle(centerSimple11FontStyle);
+                        Cell vridCell = newTripRow.createCell(5);
+                        vridCell.setCellValue(trip.getVrid());
+                        vridCell.setCellStyle(centerSimple11FontStyle);
 
-                            Cell netCell = newTripRow.createCell(6);
-                            netCell.setCellValue(trip.getPrice());
-                            netCell.setCellStyle(netDiscStyle);
+                        Cell netCell = newTripRow.createCell(6);
+                        netCell.setCellValue(trip.getPrice());
+                        netCell.setCellStyle(netDiscStyle);
 
-                            Cell discCell = newTripRow.createCell(7);
-                            discCell.setCellValue(trip.getPrice() * (1 - ((double) company.getDiscountAveka() / 100)));
-                            discCell.setCellStyle(netDiscStyle);
+                        Cell discCell = newTripRow.createCell(7);
+                        discCell.setCellValue(trip.getPrice() * (1 - ((double) company.getDiscountAveka() / 100)));
+                        discCell.setCellStyle(netDiscStyle);
 
 
-                        }
+                    }
 
-                        sheet.createRow(rowIndex++);
-                        Row totalRow = sheet.createRow(rowIndex++);
-                        Cell totalCell = totalRow.createCell(5);
-                        totalCell.setCellValue("Total:");
-                        totalCell.setCellStyle(totalStyle);
+                    sheet.createRow(rowIndex++);
+                    Row totalRow = sheet.createRow(rowIndex++);
+                    Cell totalCell = totalRow.createCell(5);
+                    totalCell.setCellValue("Total:");
+                    totalCell.setCellStyle(totalStyle);
 
-                        String totalFormula = String.format("SUM(G6:G%d)", rowIndex - 1);
-                        Cell total1Cell = totalRow.createCell(6);
-                        total1Cell.setCellFormula(totalFormula);
-                        total1Cell.setCellStyle(totalNumberStyle);
+                    String totalFormula = String.format("SUM(G6:G%d)", rowIndex - 1);
+                    Cell total1Cell = totalRow.createCell(6);
+                    total1Cell.setCellFormula(totalFormula);
+                    total1Cell.setCellStyle(totalNumberStyle);
 
-                        String totalFormulaDiscount = String.format("SUM(H6:H%d)", rowIndex - 1);
-                        Cell total2Cell = totalRow.createCell(7);
-                        total2Cell.setCellFormula(totalFormulaDiscount);
-                        total2Cell.setCellStyle(totalNumberStyle);
-                   // }
+                    String totalFormulaDiscount = String.format("SUM(H6:H%d)", rowIndex - 1);
+                    Cell total2Cell = totalRow.createCell(7);
+                    total2Cell.setCellFormula(totalFormulaDiscount);
+                    total2Cell.setCellStyle(totalNumberStyle);
+                    // }
                 }
 
-               // workbook.write(outputStream);
+                // workbook.write(outputStream);
                 //workbook.close();
                 //exportExcels.add(outputStream.toByteArray());
 
-                  //return outputStream.toByteArray();
+                //return outputStream.toByteArray();
 
             }
 
-           // XSSFWorkbook workbook1 = new XSSFWorkbook();
+            // XSSFWorkbook workbook1 = new XSSFWorkbook();
             //outputStream = new ByteArrayOutputStream();
             for (var x : companyList) {
-                Sheet sheet = workbook.createSheet(x.getKey()+"1");
+                Sheet sheet = workbook.createSheet(x.getKey() + "1");
                 int rowIndex = 0;
 
                 sheet.setColumnWidth(0, 5 * 256);
@@ -643,7 +645,7 @@ public class ExcelService implements IExcelService {
 
                 if (AVEKA) lastDiscount = x.getDiscountAveka();
                 else lastDiscount = x.getDiscount();
-                String[] headers = {"Nr.Crt:", "Data", "Nr. Camion", "Loc", "Incarcare-Descarcare", "VRID", "Pret", "Net", "Discount " +lastDiscount + "%"};
+                String[] headers = {"Nr.Crt:", "Data", "Nr. Camion", "Loc", "Incarcare-Descarcare", "VRID", "Pret", "Net", "Discount " + lastDiscount + "%"};
                 for (int j = 0; j < headers.length; j++) {
                     Cell headerCell = tableHeaderRow.createCell(j);
                     Cell headerCell2 = tableHeaderRow2.createCell(j);
@@ -780,10 +782,10 @@ public class ExcelService implements IExcelService {
 
             workbook.write(outputStream);
             workbook.close();
-           // exportExcels.add(outputStream.toByteArray());
-          //  outputStream.close();
+            // exportExcels.add(outputStream.toByteArray());
+            //  outputStream.close();
             return outputStream.toByteArray();
-          //  return exportExcels;
+            //  return exportExcels;
 
 
         } catch (IOException e) {
@@ -803,7 +805,7 @@ public class ExcelService implements IExcelService {
             return null;
 
         if (!row.getCell(4).getStringCellValue().isEmpty() && row.getCell(5).getStringCellValue().isEmpty()
-        && row.getCell(6).getStringCellValue().isEmpty())
+                && row.getCell(6).getStringCellValue().isEmpty())
             return null;
 
         if (parts.length > 2) {

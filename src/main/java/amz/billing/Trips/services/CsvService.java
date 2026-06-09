@@ -68,7 +68,7 @@ public class CsvService implements ICsvService {
                 }
 
                 String[] finalLine = line;
-                List<Stop> stopList = IntStream.iterate(19, i -> i + 3)
+                List<Stop> stopList = IntStream.iterate(21, i -> i + 3)
                         .limit(10)
                         .filter(i -> !finalLine[i].isEmpty())
                         .mapToObj(i -> createStop(finalLine, i))

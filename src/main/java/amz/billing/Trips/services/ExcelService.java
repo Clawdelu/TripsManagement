@@ -7,6 +7,7 @@ import amz.billing.Trips.enums.Status;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -64,16 +65,30 @@ public class ExcelService implements IExcelService {
 
     @Override
     public byte[] updateTripsInExcel(MultipartFile excelFile, List<Trip> tripList) {
+        if (excelFile == null || excelFile.isEmpty()) {
+            throw new RuntimeException("Fisierul Excel este gol sau lipseste.");
+        }
+
         try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook(excelFile.getInputStream())) {
             // SXSSFWorkbook sxssfWorkbook = new SXSSFWorkbook(xssfWorkbook);
             Map<String, List<Trip>> groupedByVehicleID = tripList.stream()
-                    .collect(Collectors.groupingBy(Trip::getVehicleID, LinkedHashMap::new, Collectors.toList()));
+                    .collect(Collectors.groupingBy(
+                            trip -> {
+                                String vehicleId = trip.getVehicleID();
+                                return (vehicleId == null || vehicleId.isBlank()) ? "Others" : vehicleId;
+                            },
+                            LinkedHashMap::new,
+                            Collectors.toList()
+                    ));
 
             for (String key : groupedByVehicleID.keySet()) {
                 Sheet sheet = xssfWorkbook.getSheet(key);
                 if (sheet == null) {
                     System.out.println("Sheet-ul " + key + " nu există.");
                     sheet = xssfWorkbook.getSheet("Others");
+                    if (sheet == null) {
+                        sheet = xssfWorkbook.createSheet("Others");
+                    }
 //                    if (sheet == null) {
 //                        sheet = sxssfWorkbook.createSheet("Others");
 //                        createTable(sxssfWorkbook, sheet, groupedByVehicleID.get(key));
@@ -102,10 +117,11 @@ public class ExcelService implements IExcelService {
 //            sxssfWorkbook.dispose();
 //            sxssfWorkbook.close();
             xssfWorkbook.write(outputStream);
-            xssfWorkbook.close();
 
             return outputStream.toByteArray();
 
+        } catch (OLE2NotOfficeXmlFileException | POIXMLException e) {
+            throw new RuntimeException("Fisier invalid: se accepta doar fisiere Excel de tip .xlsx / .xlsm valide.");
         } catch (IOException e) {
             throw new RuntimeException("Nu s-a putut deschide fisierul .xlsx");
         }
@@ -270,6 +286,14 @@ public class ExcelService implements IExcelService {
 
     private static byte[] findAndUpdateExcel(MultipartFile excelFile, List<Trip> tripList, String gutschrift, String invoice,
                                              String payment, Integer noAnexa) {
+        if (excelFile == null || excelFile.isEmpty()) {
+            throw new RuntimeException("Fisierul loadsExcel este gol sau lipseste.");
+        }
+
+        double previousMinInflateRatio = ZipSecureFile.getMinInflateRatio();
+        // Some valid customer templates are highly compressed and can trigger POI's default 0.01 threshold.
+        ZipSecureFile.setMinInflateRatio(0.009d);
+
         try (InputStream inputStream = excelFile.getInputStream();
              XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
 
@@ -325,8 +349,12 @@ public class ExcelService implements IExcelService {
             workbook.write(outputStream);
             workbook.close();
             return outputStream.toByteArray();
+        } catch (OLE2NotOfficeXmlFileException | POIXMLException e) {
+            throw new RuntimeException("Fisierul loadsExcel nu este un .xlsx/.xlsm valid: " + e.getMessage(), e);
         } catch (IOException e) {
-            throw new RuntimeException("Nu s-a putut deschide loads excel.");
+            throw new RuntimeException("Nu s-a putut deschide loads excel: " + e.getMessage(), e);
+        } finally {
+            ZipSecureFile.setMinInflateRatio(previousMinInflateRatio);
         }
     }
 

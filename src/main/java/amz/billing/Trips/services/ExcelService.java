@@ -557,7 +557,10 @@ public class ExcelService implements IExcelService {
                     // if (companyTrucksMapped.containsKey(company.getKey())) {
                     List<Trip> tripsToAdd = new ArrayList<>();
                     if (company.getKey().equals("Farlan")) {
-                        tripsToAdd = companyTrucksMapped.get(company.getKey());
+                        tripsToAdd = companyTrucksMapped.getOrDefault(
+                                company.getKey(),
+                                Collections.emptyList()
+                        );
                     } else {
                         tripsToAdd = companyTrucksMapped.entrySet().stream()
                                 .filter(e -> !e.getKey().equals("Farlan"))
